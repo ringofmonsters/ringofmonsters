@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ring of Monsters</title>
+<meta name="description" content="Harry Potter trifft Pokémon, in einer Welt umgeben von Nebel. Monster leben in Ringen, Champions entstehen in Arenen.">
+<meta property="og:title" content="Ring of Monsters">
+<meta property="og:description" content="Monster leben in Ringen. Champions entstehen in Arenen. Harry Potter trifft Pokémon, in einer Welt umgeben von Nebel.">
+<meta property="og:image" content="https://ringofmonsters.com/img/banner.jpg">
+<meta property="og:url" content="https://ringofmonsters.com/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#090b14">
+<link rel="icon" href="img/favicon.png">
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"></div>
+<header class="topbar">
+  <a class="brand" href="#top">Ring of Monsters</a>
+  <nav>
+    <a href="#monster" data-i18n="nav.monster">Monster</a>
+    <a href="#ringe" data-i18n="nav.rings">Ringe</a>
+    <a href="#welt">Giara</a>
+    <a href="#buch" data-i18n="nav.book">Roman</a>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button data-lang="de" aria-pressed="true">DE</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="nav-cta" href="#patreon">Patreon</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- 1 · HERO (bleibt stehen, der Inhalt schiebt sich darüber) -->
+<div class="hero-band">
+<div class="hero-fx" aria-hidden="true">
+  <canvas id="embers"></canvas>
+  <div class="mist mist-1"></div>
+  <div class="mist mist-2"></div>
+</div>
+<section class="hero">
+  <div class="hero-text">
+    <p class="kicker">Ring of Monsters</p>
+    <h1 data-i18n="hero.h1">Monster leben in Ringen.<br>Champions entstehen in Arenen.</h1>
+    <p class="hero-de" data-i18n="hero.sub">Harry Potter trifft Pokémon, in einer Welt umgeben von Nebel.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#patreon" data-i18n="hero.cta">Komm mit nach Giara</a>
+      <a class="btn btn-ghost" href="#monster" data-i18n="hero.cta2">Monster ansehen</a>
+    </div>
+  </div>
+  <figure class="hero-ring">
+    <div class="tilt">
+      <img src="img/logo.jpg" alt="Ein glühender Ring im Schnee, darin die Silhouette von Neko mit seinen zwei Schwänzen" data-i18n-attr="alt=alt.logo" width="1254" height="1254">
+      <svg class="orbit" viewBox="0 0 200 200" aria-hidden="true">
+        <g class="spin-rev">
+          <circle cx="100" cy="100" r="99" fill="none" stroke="rgba(240,166,78,.35)" stroke-width=".4" stroke-dasharray="1 3"/>
+        </g>
+        <g class="spin">
+          <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(201,209,226,.18)" stroke-width=".35"/>
+          <circle class="gem" cx="100" cy="5" r="2.2" fill="#ff5a2a" color="#ff5a2a"/>
+          <circle class="gem" cx="161.06" cy="27.23" r="2.2" fill="#3a8dff" color="#3a8dff"/>
+          <circle class="gem" cx="193.56" cy="83.5" r="2.2" fill="#a8743f" color="#a8743f"/>
+          <circle class="gem" cx="182.27" cy="147.5" r="2.2" fill="#9aa3ad" color="#9aa3ad"/>
+          <circle class="gem" cx="132.49" cy="189.27" r="2.2" fill="#dfe8f2" color="#dfe8f2"/>
+          <circle class="gem" cx="67.51" cy="189.27" r="2.2" fill="#ffd84a" color="#ffd84a"/>
+          <circle class="gem" cx="17.73" cy="147.5" r="2.2" fill="#8a4dff" color="#8a4dff"/>
+          <circle class="gem" cx="6.44" cy="83.5" r="2.2" fill="#7fd35a" color="#7fd35a"/>
+          <circle class="gem" cx="38.94" cy="27.23" r="2.2" fill="#5b5f6b" color="#9aa3ad"/>
+        </g>
+      </svg>
+    </div>
+  </figure>
+</section>
+<a class="scroll-cue" href="#monster" aria-label="Weiter zu den Monstern" data-i18n-attr="aria-label=aria.scroll"><span></span></a>
+</div>
+
+<div class="sheet">
+
+<!-- 2 · GALERIE -->
+<section id="monster" class="section">
+  <div class="section-head">
+    <p class="kicker" data-i18n="monster.kicker">Bestiarium von Giara</p>
+    <h2 data-i18n="monster.h2">Welches Monster rufst du?</h2>
+  </div>
+
+  <div class="deck-wrap" hidden>
+    <div class="deck" tabindex="0" role="region" aria-roledescription="Kartenstapel" aria-label="Monsterkarten, mit den Pfeiltasten blättern" data-i18n-attr="aria-label=aria.deck"></div>
+    <div class="deck-info" aria-live="polite">
+      <p class="deck-count"></p>
+      <h3 class="deck-name"></h3>
+      <p class="tag deck-tag"></p>
+      <p class="deck-text"></p>
+      <div class="deck-controls">
+        <button class="deck-btn deck-prev" aria-label="Vorherige Karte" data-i18n-attr="aria-label=aria.prev">‹</button>
+        <button class="deck-btn deck-next" aria-label="Nächste Karte" data-i18n-attr="aria-label=aria.next">›</button>
+        <span class="deck-hint" data-i18n="deck.hint">Karte antippen oder zur Seite wischen</span>
+      </div>
+    </div>
+    <div class="thumbs" role="tablist" aria-label="Alle Monster" data-i18n-attr="aria-label=aria.thumbs"></div>
+  </div>
+
+  <ul class="gallery">
+    <li class="card">
+      <div class="card-img"><img src="img/leviathan.jpg" alt="Der Leviathan, ein walgroßer Koloss aus Hornplatten, schwebt im Nebel über Norhol Kull" data-i18n-attr="alt=m.leviathan.alt" loading="lazy" width="991" height="1400"></div>
+      <h3>Leviathan</h3>
+      <p class="tag" data-i18n="m.leviathan.tag">Windring · Stufe 7</p>
+      <p data-i18n="m.leviathan.text">Eine Beschwörerin rief ihn außerhalb der Arena aus dem Ring, nur um zu sehen, ob sie es kann. Er hing über Norhol Kull wie ein Wal am Himmel und atmete. Ihr KAI reichte für zehn Atemzüge.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/eikthyrnir.jpg" alt="Eikthyrnir, ein riesiger Hirsch mit einem Geweih aus blühenden Birkenästen, auf einer Wiese voller Blumen" data-i18n-attr="alt=m.eikthyrnir.alt" loading="lazy" width="933" height="1400"></div>
+      <h3>Eikthyrnir</h3>
+      <p class="tag" data-i18n="m.eikthyrnir.tag">Lebensring · Stufe 5</p>
+      <p data-i18n="m.eikthyrnir.text">Ein Beschwörer ruft ihn auf ein totes Feld, und wo der leuchtende Tau von seinem Geweih tropft, schießt das Gras aus dem Boden. Danach liegt der Beschwörer zwei Tage im Bett.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/tauloeffel.jpg" alt="Der Taulöffel, ein gedrungener Wüstenhase mit zwei Ohren aus milchigem Glas, sitzt neben einem Zelt am Dünenrand" data-i18n-attr="alt=m.tauloeffel.alt" loading="lazy" width="933" height="1400"></div>
+      <h3>Taulöffel</h3>
+      <p class="tag" data-i18n="m.tauloeffel.tag">Windring · Stufe 1</p>
+      <p data-i18n="m.tauloeffel.text">Wer ihn in der Wüste aus dem Ring holt, bekommt Wasser: Über Nacht füllen sich seine Ohren aus Glas. Am Morgen geht er zurück in den Ring, und sein Beschwörer ist ein bisschen dünner.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/baku.jpg" alt="Der Baku, ein bärengroßes Wesen mit Rüssel, steht nachts in einer Dorfgasse an einem Fenster" data-i18n-attr="alt=m.baku.alt" loading="lazy" width="788" height="1400"></div>
+      <h3>Baku</h3>
+      <p class="tag" data-i18n="m.baku.tag">Erdring · Stufe 4</p>
+      <p data-i18n="m.baku.text">Sein Beschwörer ruft ihn nachts an das Fenster eines Kindes, und er trinkt die Albträume durch den Spalt. Was er davon zurück in den Ring trägt, weiß niemand.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/neko.jpg" alt="Neko, ein rundes, feuerrotes Fellwesen mit zwei buschigen Schwänzen, steht mit verschränkten Armen auf einem Zaun im Schnee" data-i18n-attr="alt=m.neko.alt" loading="lazy" width="1120" height="1400"></div>
+      <h3>Neko</h3>
+      <p class="tag" data-i18n="m.neko.tag">Ausdrücklich keine Katze</p>
+      <p data-i18n="m.neko.text">Feuerrot, rund wie ein frischer Brotlaib und gründlich beleidigt, sobald ihn jemand eine Katze nennt. Kommt nur aus dem Ring, wenn man ihn ruft, und geht nicht zurück, bevor er recht bekommen hat.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/wetterorgel.jpg" alt="Die Wetterorgel, ein schwerer schwarzer Storchenvogel mit einem Fächer aus Hornröhren statt Schwanzfedern, an einem Leuchtturm über dem Meer" data-i18n-attr="alt=m.wetterorgel.alt" loading="lazy" width="933" height="1400"></div>
+      <h3>Wetterorgel</h3>
+      <p class="tag" data-i18n="m.wetterorgel.tag">Windring · Stufe 2</p>
+      <p data-i18n="m.wetterorgel.text">Ruft man sie aus dem Ring, brummen ihre elf Hornröhren, lange bevor der Sturm am Himmel steht. Die Fischer in der Bucht zahlen ihren Beschwörer dafür, dass er sie jeden Morgen einmal ruft.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/glutschlaefer.jpg" alt="Der Glutschläfer, eine Echse wie aus verkohltem Holz mit Glut in den Rissen, liegt zusammengerollt in einem Herd" data-i18n-attr="alt=m.glutschlaefer.alt" loading="lazy" width="933" height="1400"></div>
+      <h3>Glutschläfer</h3>
+      <p class="tag" data-i18n="m.glutschlaefer.tag">Feuerring · Stufe 3</p>
+      <p data-i18n="m.glutschlaefer.text">Ein Wirt ruft ihn jeden Winter in den Herd, und solange sein KAI hält, geht das Feuer nicht aus. Wie viel ihn das kostet, sieht man im Frühling an seinem Gesicht.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/kurma.jpg" alt="Kurma, eine Riesenschildkröte mit einem Panzer aus bemoostem Fels, steht vor einem Hof im Schnee" data-i18n-attr="alt=m.kurma.alt" loading="lazy" width="1120" height="1400"></div>
+      <h3>Kurma</h3>
+      <p class="tag" data-i18n="m.kurma.tag">Riesenschildkröte</p>
+      <p data-i18n="m.kurma.text">Wer sie aus dem Ring ruft, holt einen Hügel aus Moos, Tannen und Stein auf das Feld. Sie blinzelt einmal, und ihr Beschwörer muss sich setzen.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/golem.jpg" alt="Der Golem, eine gebeugte Gestalt aus nassem Schlamm, steht nachts auf einem Feld neben einer Laterne" data-i18n-attr="alt=m.golem.alt" loading="lazy" width="933" height="1400"></div>
+      <h3>Golem</h3>
+      <p class="tag" data-i18n="m.golem.tag">Erdring · Stufe 2</p>
+      <p data-i18n="m.golem.text">Sein Beschwörer ruft ihn nachts, und er gräbt stumm die Gräben. Dabei versucht sein Schlammgesicht, das Gesicht seines Beschwörers nachzumachen. Je länger die Nacht, desto besser gelingt es.</p>
+    </li>
+    <li class="card">
+      <div class="card-img"><img src="img/kraken.jpg" alt="Riesige Arme steigen nachts zwischen den Booten eines verschneiten Hafens aus dem Wasser" data-i18n-attr="alt=m.kraken.alt" loading="lazy" width="788" height="1400"></div>
+      <h3>Kraken</h3>
+      <p class="tag" data-i18n="m.kraken.tag">Wasserring · Stufe 8</p>
+      <p data-i18n="m.kraken.text">Stufe 8. Ein Beschwörer rief ihn einmal im Hafen, und man sah nur Arme, höher als die Masten, und tief unten ein Auge wie eine versunkene Laterne. Den Beschwörer hat man nie gefunden.</p>
+    </li>
+  </ul>
+  <div class="more">
+    <a class="magic-btn" href="https://www.instagram.com/ring_of_monsters/" rel="noopener" target="_blank"><span data-i18n="insta.more">Noch mehr Monster auf Instagram</span></a>
+  </div>
+</section>
+
+<!-- 2b · RINGKLASSEN -->
+<section id="ringe" class="section rings-section">
+  <div class="section-head">
+    <p class="kicker" data-i18n="rings.kicker">Die neun Ringklassen</p>
+    <h2 data-i18n="rings.h2">Welcher Ring passt zu dir?</h2>
+  </div>
+  <div class="rings">
+    <div class="ring-list" role="tablist" aria-label="Ringklassen" data-i18n-attr="aria-label=aria.rings">
+      <button class="ring-chip" role="tab" style="--c:#ff5a2a" data-name="Feuerring" data-rare="sehr häufig" data-text="Mit dem KAI der meisten Leute reicht es gerade, um sich die Hände zu wärmen. Mit sehr viel KAI reicht es für einen Feuertornado." data-i18n-attr="data-name=r.fire.name,data-rare=rare.vc,data-text=r.fire.text"><span data-i18n="r.fire">Feuer</span></button>
+      <button class="ring-chip" role="tab" style="--c:#3a8dff" data-name="Wasserring" data-rare="sehr häufig" data-text="Kühlt, nässt, löscht. Wer damit einen ganzen See bewegen will, braucht sehr viel KAI und noch mehr Geduld." data-i18n-attr="data-name=r.water.name,data-rare=rare.vc,data-text=r.water.text"><span data-i18n="r.water">Wasser</span></button>
+      <button class="ring-chip" role="tab" style="--c:#a8743f" data-name="Erdring" data-rare="sehr häufig" data-text="Lässt den Boden zittern, weshalb Bergleute ihn lieben und Töpfer ihn ganz und gar nicht." data-i18n-attr="data-name=r.earth.name,data-rare=rare.vc,data-text=r.earth.text"><span data-i18n="r.earth">Erde</span></button>
+      <button class="ring-chip" role="tab" style="--c:#9aa3ad" data-name="Steinring" data-rare="häufig" data-text="Härtet alles, was man damit anfasst. Als Schmuck viel zu schwer, als Briefbeschwerer unschlagbar." data-i18n-attr="data-name=r.stone.name,data-rare=rare.c,data-text=r.stone.text"><span data-i18n="r.stone">Stein</span></button>
+      <button class="ring-chip" role="tab" style="--c:#dfe8f2" data-name="Windring" data-rare="häufig" data-text="Der leichteste aller Ringe. Es heißt, früher hätten manche damit fliegen können, aber es heißt auch, Eskil sei klug gewesen." data-i18n-attr="data-name=r.wind.name,data-rare=rare.c,data-text=r.wind.text"><span data-i18n="r.wind">Wind</span></button>
+      <button class="ring-chip" role="tab" style="--c:#ffd84a" data-name="Lichtring" data-rare="selten" data-text="Leuchtet ganz von allein, und in den großen Städten gibt es Leute, die davon nicht genug an den Fingern haben können." data-i18n-attr="data-name=r.light.name,data-rare=rare.r,data-text=r.light.text"><span data-i18n="r.light">Licht</span></button>
+      <button class="ring-chip" role="tab" style="--c:#8a4dff" data-name="Dunkelring" data-rare="selten" data-text="Schluckt das Licht ringsum. Getragen wird er trotzdem kaum, denn auf Dauer färbt er die Haut schwarz, und zwar nicht zum Abwaschen." data-i18n-attr="data-name=r.dark.name,data-rare=rare.r,data-text=r.dark.text"><span data-i18n="r.dark">Dunkelheit</span></button>
+      <button class="ring-chip" role="tab" style="--c:#7fd35a" data-name="Lebensring" data-rare="selten" data-text="Heilt kleine Wunden und lässt Felder schneller wachsen. Auf dem Markt kostet er entsprechend, und gefeilscht wird trotzdem." data-i18n-attr="data-name=r.life.name,data-rare=rare.r,data-text=r.life.text"><span data-i18n="r.life">Leben</span></button>
+      <button class="ring-chip" role="tab" style="--c:#5b5f6b" data-name="Todesring" data-rare="sehr selten" data-text="Ein Ring, der dich verzehrt. Schneller als alle anderen." data-i18n-attr="data-name=r.death.name,data-rare=rare.vr,data-text=r.death.text"><span data-i18n="r.death">Tod</span></button>
+      <button class="ring-chip ring-mystic" role="tab" style="--c:#f4e8ff" data-name="Mystischer Ring" data-rare="einzigartig" data-text="Manche Ringe passen in keine Klasse. Von jedem gibt es genau einen, und das Monster darin auch nur ein einziges Mal auf ganz Giara. Wer so einen findet, hat entweder großes Glück oder sehr bald sehr viel Besuch." data-i18n-attr="data-name=r.mystic.name,data-rare=rare.u,data-text=r.mystic.text"><span class="seal" data-i18n="r.sealed">Versiegelt</span><span class="unseal" data-i18n="r.mystic">Mystisch</span></button>
+    </div>
+    <div class="ring-stage" aria-live="polite">
+      <div class="ring-orb" aria-hidden="true"><span></span></div>
+      <div class="ring-info">
+        <p class="ring-rare"></p>
+        <h3 class="ring-name"></h3>
+        <p class="ring-text"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · DIE WELT -->
+<section id="welt" class="section world">
+  <figure class="world-banner">
+    <img src="img/banner.jpg" alt="Ein Junge mit Schild und eine Ziege gehen auf ein verschneites Dorf zu, dahinter ragt eine riesige Wand aus Nebel in den Himmel" data-i18n-attr="alt=alt.banner" loading="lazy" width="1400" height="700">
+  </figure>
+  <div class="section-head">
+    <p class="kicker" data-i18n="world.kicker">Die Welt</p>
+    <h2>Giara</h2>
+  </div>
+  <div class="prose">
+    <p data-i18n="world.p1">Um ganz Giara herum steht der Schleier, eine Wand aus Nebel, die sich auch beim stärksten Sturm keinen Fingerbreit bewegt. Wo er den Boden berührt, wächst nichts, und wer hineingeht, kommt nicht wieder heraus.</p>
+    <p data-i18n="world.p2">Darum geht niemand gern in die Nähe des Schleiers.</p>
+    <p data-i18n="world.p3">In den Ringen leben Monster, die Albmare. Wer einen ruft, ist Beschwörer, und jeder Albmar trinkt dabei von der Kraft dessen, der ihn gerufen hat, so lange, bis einer von beiden die Verbindung kappt. Gekämpft wird in der Arena. Außerhalb ist das Beschwören streng verboten, woran sich selbstverständlich alle halten.</p>
+  </div>
+
+  <h3 class="cities-title" data-i18n="world.cities">Die sechs Städte</h3>
+  <p class="map-hint" hidden data-i18n="world.hint">Fahr über eine Stadt oder tipp sie an.</p>
+  <div class="map-wrap" hidden>
+    <div class="map-stage">
+      <div class="map">
+        <img src="img/karte.webp" alt="Karte von Giara mit den sechs Städten, umgeben von Nebel" data-i18n-attr="alt=alt.map" loading="lazy" width="1000" height="750">
+        <div class="map-shine" aria-hidden="true"></div>
+        <div class="map-pins"></div>
+      </div>
+    </div>
+    <div class="map-card" aria-live="polite">
+      <div class="map-card-crest" aria-hidden="true"></div>
+      <p class="map-crest"></p>
+      <h4 class="map-name"></h4>
+      <p class="map-text"></p>
+    </div>
+  </div>
+  <ul class="cities">
+    <li data-x="15.2" data-y="10.5" data-icon="axes" data-crest="Wappen: zwei Äxte des Kull" data-i18n-attr="data-crest=c.norhol.crest"><h4>Norhol Kull</h4><p data-i18n="c.norhol.text">Eisberge, Met, Pelzmäntel und genau ein Langhaus. Nicht zwei. Eins.</p></li>
+    <li data-x="61.5" data-y="18.8" data-icon="bird" data-crest="Wappen: der Feuervogel" data-i18n-attr="data-crest=c.sol.crest"><h4>Sol Thalea</h4><p data-i18n="c.sol.text">Die Hauptstadt mit dem schönsten Stadion der Welt. Einmal im Jahr wird hier das Finale ausgetragen.</p></li>
+    <li data-x="31.5" data-y="42.5" data-icon="table" data-crest="Wappen: die Tafel der fünf Wohlstandsgötter" data-i18n-attr="data-crest=c.elex.crest"><h4>Elexandria</h4><p data-i18n="c.elex.text">Die Handelsstadt wächst nicht in die Höhe, sondern Stockwerk um Stockwerk in die Erde hinein.</p></li>
+    <li data-x="65.5" data-y="41" data-icon="sun" data-crest="Wappen: Asahis aufgehende Sonne" data-i18n-attr="data-crest=c.tobu.crest"><h4>Tobushima</h4><p data-i18n="c.tobu.text">Ein Kaiserpalast auf der Klippe, Wasserfälle und Schmiede, die Ringe in Schwerter fassen.</p></li>
+    <li data-x="81.5" data-y="59.5" data-icon="whale" data-crest="Wappen: der rote Wal Umkomo" data-i18n-attr="data-crest=c.zanaos.crest"><h4>Zanaos</h4><p data-i18n="c.zanaos.text">Die Inselstadt mit dem größten Hafen, und auf den Nachbarinseln wohnen Leute, denen man besser nichts leiht.</p></li>
+    <li data-x="52.5" data-y="78.5" data-icon="leaf" data-crest="Wappen: das Blatt des Schlangenbaums" data-i18n-attr="data-crest=c.oel.crest"><h4>Oelhaim</h4><p data-i18n="c.oel.text">Lehmziegel, eine Wüste ohne Ende und Werkstätten, aus denen es schon raucht.</p></li>
+    <li class="lost" data-x="14" data-y="87.5" data-icon="none" data-crest="Wappen: unbekannt" data-i18n-attr="data-crest=c.lost.crest"><h4 data-i18n="c.lost.name">Die Vergessene Stadt</h4><p data-i18n="c.lost.text">Hier landet, wer sonst nirgends mehr hin darf. Turniere gibt es keine, Besuch auch nicht so gern.</p></li>
+  </ul>
+</section>
+
+<!-- 4 · DAS BUCH -->
+<section id="buch" class="section book">
+  <div class="book-img">
+    <img src="img/arena.jpg" alt="Eine leere Arena aus Holz in der Dämmerung, Fackeln brennen an den Toren" data-i18n-attr="alt=alt.arena" loading="lazy" width="1120" height="1400">
+  </div>
+  <div class="book-text">
+    <p class="kicker" data-i18n="book.kicker">Das Buch</p>
+    <h2 data-i18n="book.h2">Der Roman zu Ring of Monsters.</h2>
+    <p data-i18n="book.p1">Ein Bauernjunge mit einem „nutzlosen“ Ring schwört, das größte Turnier der Welt zu gewinnen, um seinen Vater zu retten.</p>
+    <p data-i18n="book.p2">Denn sein Vater ist krank, und zwar nicht auf die Art, die man mit Tee und Bettruhe wegbekommt. Er schläft und schläft, und auf seiner Haut wächst Moos. Heilen kann das niemand. Vermutlich nur der Wunschring, und einen Wunsch bekommt allein, wer in Sol Thalea das Finale gewinnt.</p>
+    <blockquote>
+      <p data-i18n="book.quote">„Anders. Ja. Das ist das Wort.“</p>
+      <cite data-i18n="book.cite">Hannek, der zweitbeste Ringschmied von Norhol Kull, über den nutzlosen Ring</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- 5 · PATREON -->
+<section id="patreon" class="section signup">
+  <div class="signup-box">
+    <p class="kicker">Patreon</p>
+    <h2 data-i18n="pat.h2">Komm mit nach Giara.</h2>
+    <p data-i18n="pat.p">Auf Patreon erscheinen Geschichten aus Giara, neue Monster und Blicke hinter die Kulissen, und manches davon gibt es nirgendwo sonst. Folgen kostet nichts.</p>
+    <a class="btn btn-primary btn-big" href="https://www.patreon.com/ringofmonsters" rel="noopener" target="_blank" data-i18n="pat.cta">Zu Patreon</a>
+  </div>
+  <div class="social">
+    <p data-i18n="insta.p">Noch mehr Monster aus Giara:</p>
+    <a class="magic-btn" href="https://www.instagram.com/ring_of_monsters/" rel="noopener" target="_blank"><span>Instagram @ring_of_monsters</span></a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p data-i18n="foot.tag">Monster leben in Ringen. Champions entstehen in Arenen.</p>
+  <p class="small">© 2026 Ring of Monsters · <a href="impressum.html" data-i18n="foot.imprint">Impressum</a> · <a href="datenschutz.html" data-i18n="foot.privacy">Datenschutz</a></p>
+</footer>
+
+</div><!-- /sheet -->
+</main>
+
+<div class="neko" aria-live="polite">
+  <div class="neko-bubble" hidden></div>
+  <button class="neko-body" aria-label="Neko anstupsen" data-i18n-attr="aria-label=aria.neko"><canvas width="32" height="32"></canvas></button>
+  <button class="neko-close" aria-label="Neko wegschicken" data-i18n-attr="aria-label=aria.nekoclose">×</button>
+</div>
+
+<script src="deck.js"></script>
+<script src="giara.js"></script>
+<script src="map2d.js"></script><script src="fx.js"></script>
+<script src="neko.js"></script>
+</body>
+</html>
