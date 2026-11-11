@@ -17,7 +17,7 @@
     en: { zin: 'Zoom in', zout: 'Zoom out', reset: 'Whole map', hint: 'Tap a city to fly in, tap again to fly out', hintDesk: 'Hover over a city' }
   };
   // Maus mit Hover = Desktop: keine Kamerafahrt, damit die Stadtinfo unten immer sichtbar bleibt
-  const DESK = matchMedia('(hover: hover) and (pointer: fine)');
+  const DESK = matchMedia('(min-width: 821px)');
   let isStatic = DESK.matches;
 
   // ---------- Aufbau ----------
@@ -217,6 +217,37 @@
       if (card) setTimeout(() => card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }), 300);
     });
   });
+
+  // Desktop: die Stadtinfo erscheint als Banner direkt über der Stadt, die Karte bleibt fest liegen
+  const cardHome = card && card.parentNode, cardNext = card && card.nextSibling;
+  function popAt(i) {
+    if (!isStatic || !card) return;
+    const x = +lis[i].dataset.x, y = +lis[i].dataset.y;
+    card.style.left = x + '%';
+    card.style.top = y + '%';
+    card.classList.toggle('pop-below', y < 42);
+    card.classList.toggle('pop-left', x < 24);
+    card.classList.toggle('pop-right', x > 76);
+    card.classList.add('pop-show');
+  }
+  function placeCard() {
+    if (!card) return;
+    if (isStatic) {
+      card.classList.add('map-pop');
+      stage.appendChild(card);
+    } else {
+      card.classList.remove('map-pop', 'pop-show', 'pop-below', 'pop-left', 'pop-right');
+      card.style.left = card.style.top = '';
+      cardHome.insertBefore(card, cardNext);
+    }
+  }
+  [...pinLayer.querySelectorAll('.pin')].forEach((pin, i) => {
+    pin.addEventListener('mouseenter', () => popAt(i));
+    pin.addEventListener('focus', () => popAt(i));
+  });
+  stage.addEventListener('mouseleave', () => card && card.classList.remove('pop-show'));
+  placeCard();
+  DESK.addEventListener('change', placeCard);
 
   // ---------- Takt ----------
   let visible = true, last = performance.now(), puffClock = 0, glintClock = 0;

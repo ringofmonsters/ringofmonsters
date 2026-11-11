@@ -1004,3 +1004,30 @@ body::before {
 @media (min-width: 821px) {
   .map-wrap.is-2d .map-stage { width: min(100%, 1020px, max(560px, calc((100svh - 17rem) * 1448 / 1086))); }
 }
+
+/* Desktop: Stadtinfo als Banner direkt über (oder unter) der Stadt */
+.map-wrap.is-2d .map-card.map-pop {
+  position: absolute; z-index: 6; margin: 0; width: min(380px, 44%); min-height: 0;
+  padding: .9rem 1.1rem; pointer-events: none;
+  display: grid; grid-template-columns: auto 1fr; column-gap: .9rem; align-items: center;
+  background: linear-gradient(rgba(14, 16, 32, .9), rgba(14, 16, 32, .9)) padding-box, var(--glow-border) border-box;
+  border: 1px solid transparent; border-radius: 12px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .55);
+  --tx: -50%; --ty: calc(-100% - 34px);
+  transform: translate(var(--tx), var(--ty)) scale(.94); opacity: 0;
+  transition: opacity .2s ease, transform .2s ease, left .25s ease, top .25s ease;
+  animation: none;
+}
+.map-wrap.is-2d .map-card.map-pop.pop-below { --ty: 34px; }
+.map-wrap.is-2d .map-card.map-pop.pop-left { --tx: -12%; }
+.map-wrap.is-2d .map-card.map-pop.pop-right { --tx: -88%; }
+.map-wrap.is-2d .map-card.map-pop.pop-show { opacity: 1; transform: translate(var(--tx), var(--ty)) scale(1); }
+.map-wrap.is-2d .map-card.map-pop .map-card-crest { grid-row: 1 / span 3; }
+.map-wrap.is-2d .map-card.map-pop .map-card-crest svg { width: 40px; height: 48px; padding: 7px 7px 13px; margin: 0; }
+.map-wrap.is-2d .map-card.map-pop .map-crest { font-size: .62rem; margin-bottom: .2rem; }
+.map-wrap.is-2d .map-card.map-pop .map-name { font-size: 1.2rem; margin-bottom: .25rem; }
+.map-wrap.is-2d .map-card.map-pop .map-text { font-size: .88rem; line-height: 1.4; }
+@media (min-width: 821px) {
+  .map-wrap.is-2d .map-stage { width: min(100%, 1020px); }
+}
