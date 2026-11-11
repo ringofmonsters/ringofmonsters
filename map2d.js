@@ -1,7 +1,8 @@
 // Die gemalte Weltkarte von Giara, ganz leicht belebt:
 // feiner, langsamer Schnee im Norden, sehr ruhiges Wasser, Rauch über dem Vulkan,
 // sanftes Licht und kleine Glanzpunkte auf dem Meer.
-// Ziehen verschiebt, + / − zoomt, ein Klick auf eine Stadt fährt hinein.
+// Desktop (Maus): die Karte steht still, Darüberfahren zeigt die Stadtinfo.
+// Handy/Tablet: Antippen fährt hinein und zeigt die Info darunter, noch einmal Tippen fährt wieder hinaus.
 // Beim Darüberfahren leuchtet die Stadt auf, ihr Wappen erscheint unten in der Stadtinfo.
 (function () {
   const wrap = document.querySelector('.map-wrap');
@@ -12,9 +13,12 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const L = () => (window.ROM_LANG && window.ROM_LANG() === 'en' ? 'en' : 'de');
   const TXT = {
-    de: { zin: 'Hineinzoomen', zout: 'Herauszoomen', reset: 'Ganze Karte', hint: 'Ziehen verschiebt die Karte, eine Stadt antippen fährt hinein' },
-    en: { zin: 'Zoom in', zout: 'Zoom out', reset: 'Whole map', hint: 'Drag to move the map, tap a city to fly in' }
+    de: { zin: 'Hineinzoomen', zout: 'Herauszoomen', reset: 'Ganze Karte', hint: 'Eine Stadt antippen fährt hinein, noch einmal Tippen fährt hinaus', hintDesk: 'Fahr mit der Maus über eine Stadt' },
+    en: { zin: 'Zoom in', zout: 'Zoom out', reset: 'Whole map', hint: 'Tap a city to fly in, tap again to fly out', hintDesk: 'Hover over a city' }
   };
+  // Maus mit Hover = Desktop: keine Kamerafahrt, damit die Stadtinfo unten immer sichtbar bleibt
+  const DESK = matchMedia('(hover: hover) and (pointer: fine)');
+  let isStatic = DESK.matches;
 
   // ---------- Aufbau ----------
   const g = document.createElement('div');
@@ -52,7 +56,7 @@
     g.querySelector('[data-z="in"]').setAttribute('aria-label', t.zin);
     g.querySelector('[data-z="out"]').setAttribute('aria-label', t.zout);
     g.querySelector('[data-z="reset"]').setAttribute('aria-label', t.reset);
-    g.querySelector('.gmap-hint').textContent = t.hint;
+    g.querySelector('.gmap-hint').textContent = isStatic ? t.hintDesk : t.hint;
   }
   setTexts();
   document.addEventListener('langchange', setTexts);
@@ -140,28 +144,39 @@
     ts = zoom; ttx = vw / 2 - u * vw * ts; tty = vh / 2 - v * vh * ts;
     clampTarget();
   }
+  const home = () => { ts = 1; ttx = 0; tty = 0; };
+  function applyMode() {
+    isStatic = DESK.matches;
+    wrap.classList.toggle('map-static', isStatic);
+    if (isStatic) home();
+    setTexts();
+  }
+  applyMode();
+  DESK.addEventListener('change', applyMode);
   g.querySelector('.gmap-zoom').addEventListener('click', e => {
+    if (isStatic) return;
     const b = e.target.closest('button'); if (!b) return;
     const vw = view.clientWidth, vh = view.clientHeight;
     if (b.dataset.z === 'in') zoomAt(1.5, vw / 2, vh / 2);
     else if (b.dataset.z === 'out') zoomAt(1 / 1.5, vw / 2, vh / 2);
     else { ts = 1; ttx = 0; tty = 0; }
   });
-  view.addEventListener('dblclick', e => { const r = view.getBoundingClientRect(); zoomAt(1.8, e.clientX - r.left, e.clientY - r.top); });
+  view.addEventListener('dblclick', e => { if (isStatic) return; const r = view.getBoundingClientRect(); zoomAt(1.8, e.clientX - r.left, e.clientY - r.top); });
   view.addEventListener('wheel', e => {
-    if (!(e.ctrlKey || e.metaKey)) return;     // ohne Strg scrollt die Seite normal weiter
+    if (isStatic || !(e.ctrlKey || e.metaKey)) return;     // ohne Strg scrollt die Seite normal weiter
     e.preventDefault();
     const r = view.getBoundingClientRect();
     zoomAt(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX - r.left, e.clientY - r.top);
   }, { passive: false });
   const pts = new Map();
-  let lastDist = 0, dragMoved = 0;
+  let lastDist = 0, dragMoved = 0, pinched = false;
   view.addEventListener('pointerdown', e => {
-    if (e.target.closest('.pin') || e.target.closest('.gmap-ui')) return;
+    if (e.target.closest('.pin')) { if (!pts.size) dragMoved = 0; return; }
+    if (isStatic || e.target.closest('.gmap-ui')) return;
     pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
     view.setPointerCapture(e.pointerId);
-    dragMoved = 0;
-    if (pts.size === 2) { const [a, b] = [...pts.values()]; lastDist = Math.hypot(a.x - b.x, a.y - b.y); }
+    if (pts.size === 1) { dragMoved = 0; pinched = false; }
+    if (pts.size === 2) { pinched = true; const [a, b] = [...pts.values()]; lastDist = Math.hypot(a.x - b.x, a.y - b.y); }
     view.classList.add('grab');
   });
   view.addEventListener('pointermove', e => {
@@ -178,14 +193,29 @@
       lastDist = d;
     }
   });
-  const up = e => { pts.delete(e.pointerId); if (pts.size < 2) lastDist = 0; if (!pts.size) view.classList.remove('grab'); };
+  const up = e => {
+    if (!pts.has(e.pointerId)) return;
+    pts.delete(e.pointerId); if (pts.size < 2) lastDist = 0;
+    if (!pts.size) {
+      view.classList.remove('grab');
+      // kurzes Tippen auf die hineingefahrene Karte fährt wieder hinaus
+      if (e.type === 'pointerup' && e.pointerType !== 'mouse' && !pinched && dragMoved < 8 && ts > 1.01) home();
+    }
+  };
   view.addEventListener('pointerup', up);
   view.addEventListener('pointercancel', up);
 
-  // Klick auf eine Stadt fährt hinein (giara.js zeigt Wappen und Text unten in der Stadtinfo)
+  // Antippen einer Stadt fährt hinein, noch einmal Tippen fährt hinaus
+  // (giara.js zeigt Wappen und Text unten in der Stadtinfo)
   const lis = [...document.querySelectorAll('.cities li')];
+  const card = wrap.querySelector('.map-card');
   [...pinLayer.querySelectorAll('.pin')].forEach((pin, i) => {
-    pin.addEventListener('click', () => { if (dragMoved > 6) return; flyTo(+lis[i].dataset.x / 100, +lis[i].dataset.y / 100, 2.2); });
+    pin.addEventListener('click', () => {
+      if (isStatic || dragMoved > 8) return;
+      if (ts > 1.01) { home(); return; }
+      flyTo(+lis[i].dataset.x / 100, +lis[i].dataset.y / 100, 2.2);
+      if (card) setTimeout(() => card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }), 300);
+    });
   });
 
   // ---------- Takt ----------

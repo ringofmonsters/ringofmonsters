@@ -619,6 +619,11 @@ html[lang="en"] .en { display: none; }
 
 /* Zauberknopf */
 .more { text-align: center; margin-top: 3rem; }
+.more, .social { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.social p { margin: 0 0 .2rem; }
+/* Desktop: die Karte steht still und passt samt Stadtinfo auf den Bildschirm */
+.map-wrap.is-2d.map-static .gmap-zoom { display: none; }
+.map-wrap.is-2d.map-static .gmap-view { cursor: default; }
 .magic-btn {
   position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: .6rem;
   padding: 1rem 2rem; border-radius: 999px; text-decoration: none;
@@ -993,4 +998,9 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; }
+}
+
+/* Desktop: Karte so hoch, dass die Stadtinfo darunter noch auf den Bildschirm passt */
+@media (min-width: 821px) {
+  .map-wrap.is-2d .map-stage { width: min(100%, 1020px, max(560px, calc((100svh - 17rem) * 1448 / 1086))); }
 }
