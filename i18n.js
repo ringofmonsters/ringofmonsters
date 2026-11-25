@@ -8,7 +8,7 @@
     'nav.book': 'Novel',
     'hero.h1': 'Monsters live in rings.<br>Champions are made in arenas.',
     'foot.tag': 'Monsters live in rings. Champions are made in arenas.',
-    'hero.sub':'Harry Potter meets Pokémon, in a world walled in by mist.',
+    'hero.sub':'Monsters live in rings, battles are fought in arenas, and all around lies a mist that swallows everything.',
     'hero.cta': 'Come to Giara',
     'hero.cta2': 'See the monsters',
     'alt.logo': 'A glowing ring in the snow, inside it the silhouette of Neko with his two tails',
